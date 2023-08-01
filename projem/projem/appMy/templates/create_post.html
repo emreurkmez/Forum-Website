@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load static %}
+
+    <h1>Post Oluştur</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Post Oluştur</button>
+    </form>
