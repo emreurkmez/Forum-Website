@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block nonheader %}
+<main>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <!-- Container wrapper -->
+        <div class="container-fluid">
+          <!-- Toggle button -->
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-mdb-toggle="collapse"
+            data-mdb-target="#navbarRightAlignExample"
+            aria-controls="navbarRightAlignExample"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <i class="fas fa-bars"></i>
+          </button>
+      
+          <!-- Collapsible wrapper -->
+          <div class="collapse navbar-collapse" id="navbarRightAlignExample">
+            <!-- Right links -->
+        <form action="">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item bg-image hover-zoom">
+          <a href="{% url 'logout' %}" class="btn btn-danger ms-3" role="button">ÇIKIŞ <i class="fas fa-right-from-bracket"></i></a>
+          {% if user.profile.profile_photo %}
+            <img class="ms-3" style="width: 40px; height: 40px; object-fit: contain;" src="{{ user.profile.profile_photo.url }}" alt="">
+          {% else %}
+            <img class="ms-3" style="width: 40px; height: 40px; object-fit: contain;" src="{% static 'image/default_profile_image.jpg' %}">
+          {% endif %}
+        </li>
+        <li class="nav-item">
+          <h4 class="text-success capitalize-first-letter">{{ user.username }}</h4>
+        </li>
+      </form>
+      <!-- Right links -->
+            <!-- Left links -->
+          </div>
+          <div class=" mx-3 me-5" style="color: #333; font-size: x-large; font-weight: 700;">
+            Your brand name
+          </div>
+          </div>
+          <!-- left links -->
+          <!-- Collapsible wrapper -->
+        </div>
+        <!-- Container wrapper -->
+        
+    </nav>
+
+    <form enctype="multipart/form-data" method="post" action="{% url 'create_content' %}">
+        {% csrf_token %}
+        <div class="container text-center">
+            <h1 class="text-center text-success">Hızlı Konu Aç</h1>
+    
+            <!-- Konu Başlığı -->
+            <input style="font-size: 28px; " class="w-100 border-success " maxlength="100" placeholder="Konu Başlığı" type="text" id="title" name="title" required>
+    
+            
+    
+            <!-- Konu Detayı -->
+            <div>
+                <textarea class="w-100 border-success" placeholder="Konu detayı" id="content" name="content" rows="5" required></textarea>
+            </div>
+    
+            <!-- Konuyu Gönder -->
+            <div>
+                <input class="border-success float-lg-start" type="submit" value="Konuyu Gönder">
+                <div class="extra-options float-lg-end">
+                    <label for="file-upload" style="border: 3px solid greenyellow;  cursor: pointer; height: 32;">
+                        Resim Yükle
+                    </label>
+                    <input style="display: none;" type="file" id="file-upload" name="image" accept="image/*">
+                    <button><img src="video-upload.png" alt="Video Yükle"></button>
+                </div>
+            </div>
+        </div>
+    </form>
+        
+</main>
+{% endblock nonheader %}
+    

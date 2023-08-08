@@ -4,29 +4,19 @@
 {% block nonheader %}
 <main>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <!-- Container wrapper -->
-    <div class="container-fluid">
-      <!-- Toggle button -->
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-mdb-toggle="collapse"
-        data-mdb-target="#navbarRightAlignExample"
-        aria-controls="navbarRightAlignExample"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <i class="fas fa-bars"></i>
-      </button>
+   
   
-      <!-- Collapsible wrapper -->
       <div class="collapse navbar-collapse" id="navbarRightAlignExample">
         <!-- Right links -->
         <form action="">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
           <li class="nav-item bg-image hover-zoom">
             <a href="{% url 'logout' %}" class="btn btn-danger ms-3" role="button">ÇIKIŞ <i class="fas fa-right-from-bracket"></i></a>
-            <img class="ms-3" style="width: 40px; height: 40px; object-fit: contain;" src="static/image/userphoto.jpg" alt="">
+            {% if user.profile.profile_photo %}
+              <img class="ms-3" style="width: 40px; height: 40px; object-fit: contain;" src="{{ user.profile.profile_photo.url }}" alt="">
+            {% else %}
+              <img class="ms-3" style="width: 40px; height: 40px; object-fit: contain;" src="{% static 'image/default_profile_image.jpg' %}">
+            {% endif %}
           </li>
           <li class="nav-item">
             <h4 class="text-success capitalize-first-letter">{{ user.username }}</h4>
@@ -40,10 +30,32 @@
       </div>
       </div>
       <!-- left links -->
-      <!-- Collapsible wrapper -->
-    </div>
+     
     <!-- Container wrapper -->
     
+</nav>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid justify-content-center ">
+    <nav aria-label="breadcrumb hover-shadow">
+      <ol class="breadcrumb ">
+        <li class="breadcrumb-item">
+          <a class="hover-shadow" href="welcome.html">ANASAYFA</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a class="hover-shadow" href="#">TOP-100</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          <a class="hover-shadow" href="#">GRUPLAR</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          <a class="hover-shadow" href="#">ANKETLER</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          <a class="hover-shadow" href="#">FORUM</a>
+        </li>
+      </ol>
+    </nav>
+  </div>
 </nav>
 <div class="search-side">
   <div class="input-group search-side rounded  mt-3">
@@ -53,15 +65,17 @@
 </div>
 <div class="share d-flex w-100">
   <!-- leftside -->
-  <div class="subject border border-success w-50 m-5 hoverable hover-shadow cursor-pointer">
-    <div class="d-flex align-items-center">
-      <img class="ms-3" style="width: 40px; height: 40px; object-fit: contain;" src="static/image/folder.png" alt="">
-      <h5 class="ms-3">Standart Konu Aç</h5>
+  <a href="{% url 'create_content' %}" class="d-flex justify-content-center w-100 text-decoration-none" style="text-decoration: none;">
+    <div class="subject border border-success w-50 m-5 hoverable hover-shadow cursor-pointer">
+      <div class="d-flex align-items-center">
+        <img class="ms-3" style="width: 40px; height: 40px; object-fit: contain;" src="static/image/folder.png" alt="">
+        <h5 class="ms-3">Standart Konu Aç</h5>
+      </div>
+      <div>
+        <p class="ms-3">Başlık ve detaydan oluşan,tamamı ile özelleştirilebilir bir konu açın</p>
+      </div>
     </div>
-    <div>
-      <p class="ms-3">Başlık ve detaydan oluşan,tamamı ile özelleştirilebilir bir konu açın</p>
-    </div>
-  </div>
+  </a>
   <!-- leftside -->
 </div>
 </main>

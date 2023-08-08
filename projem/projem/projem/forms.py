@@ -1,12 +1,13 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from appMy.models import Profile
 
-
-class RegisterForm(UserCreationForm):
-    email = forms.EmailField(max_length=100, help_text="Lütfen geçerli bir email adresi girin.")
-
-    class Meta:
-        model = User
-        fields = ['username', 'email', 'password1', 'password2']
-
+class UserRegistrationForm(forms.Form):
+    fname = forms.CharField(max_length=100)
+    lname = forms.CharField(max_length=100)
+    profile_photo=forms.ImageField(required=False)
+    email = forms.EmailField()
+    username = forms.CharField(max_length=100)
+    password1 = forms.CharField(widget=forms.PasswordInput)
+    password2 = forms.CharField(widget=forms.PasswordInput)
+    agree_terms = forms.BooleanField()
+    

@@ -1,0 +1,29 @@
+{% for news in new_news %}
+<div class="d-flex">
+    <a href="{% url 'news_detail' news.id %}">
+        <div class="left w-50 d-flex">
+            <div class="m-3">
+                <img style="width: 60px; height: 60px; object-fit: contain;" src="{% static 'image/folder.png' %}" alt="">
+            </div>
+            <div class="m-3">
+                <h5 class="text-success">{{ news.title }}</h5>
+                <p>{{ news.content }}</p>
+            </div>
+        </div>
+    </a>
+    <div class="right d-flex">
+        <div class="m-3">
+            <p>({{ news.topic_count }} topic)</p>
+            <h5>Topic</h5>
+        </div>
+        <div class="m-3">
+            <p>({{ news.post_count }} post)</p>
+            <h5>Post</h5>
+        </div>
+        <div class="m-3">
+            <img style="height: 30px; width: 30; object-fit: contain;" src="{% static 'image/userphoto.jpg' %}" alt="">
+            <p>Replied by: {{ news.user_name }} {{ news.response_date|date:"d-m-Y" }}</p>
+        </div>
+    </div>
+</div>
+{% endfor %}
