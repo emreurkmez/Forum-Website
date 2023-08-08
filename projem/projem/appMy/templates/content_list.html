@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+<h3>Konu Aç</h3>
+<a href="{% url 'create_product' %}">Ürün Paylaş</a>
+<ul>
+    {% for product in products %}
+    <li>
+        <h4>{{ product.title }}</h4>
+        <p>{{ product.content }}</p>
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.title }}" style="max-width: 200px;">
+        {% endif %}
+        <hr>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock main %}
+    

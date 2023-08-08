@@ -7,7 +7,7 @@
     <nav aria-label="breadcrumb hover-shadow">
       <ol class="breadcrumb ">
         <li class="breadcrumb-item">
-          <a class="hover-shadow" href="#">ANASAYFA</a>
+          <a class="hover-shadow" href="index.html">ANASAYFA</a>
         </li>
         <li class="breadcrumb-item">
           <a class="hover-shadow" href="#">TOP-100</a>
@@ -37,33 +37,36 @@
     </div>
     <div class="box1">
       <h5 class="bg-secondary bg-opacity-25 mt-3">BlogApp</h5>
-      <div class="d-flex">
-        <div class="left w-50 d-flex">
-          <div class="m-3">
-            <img style="width: 60px; height: 60px; object-fit: contain;" src="static/image/folder.png" alt="">
+      {% for news in new_news %}
+   
+        <div class="d-flex">
+          <div class="left w-50 d-flex">
+            <div class="m-3">
+              <img style="width: 60px; height: 60px; object-fit: contain;" src="static/image/folder.png" alt="">
+            </div>
+            <div class="m-3">
+              <h5 class="text-success">{{ news.title }}</h5>
+              <p >{{ news.content }}</p>
+            </div>
           </div>
-          <div class="m-3">
-            <h5 class="text-success">Yeni Haberler</h5>
-            <p >Genel bilgilendirmeler</p>
+          <div class="right d-flex">
+            <div class="m-3">
+              <p>{{ news.topic_count }}</p>
+              <h5>Konu</h5>
+            </div>
+            <div class="m-3">
+              <p>{{ news.post_count }}</p>
+              <h5>Gönderi</h5>
+            </div>
+            <div class="m-3">
+              <img style="height: 30px; width: 30; object-fit: contain;" src="static/image/userphoto.jpg" alt="">
+              <p>Cevapladı : ({{ news.user_name }}) ({{ news.response_date }})</p>
+              
+              
+            </div>
           </div>
         </div>
-        <div class="right d-flex">
-          <div class="m-3">
-            <p>(konu sayısı)</p>
-            <h5>Konu</h5>
-          </div>
-          <div class="m-3">
-            <p>(gönderi sayısı)</p>
-            <h5>Gönderi</h5>
-          </div>
-          <div class="m-3">
-            <img style="height: 30px; width: 30; object-fit: contain;" src="static/image/userphoto.jpg" alt="">
-            <p>Cevapladı : (kullanıcı adı) (paylaşılan tarih)</p>
-            
-            
-          </div>
-        </div>
-      </div>
+      {% endfor %}
       <hr>
       <div class="d-flex">
         <div class="left w-50 d-flex">
@@ -226,40 +229,22 @@
       </div>
     </div>
     <div class="border border-success">
-      <div>
-        <h4 class="text-center bg-success text-light">SON GÖNDERİLER</h4>
-      </div>
-      <div class="d-flex">
-        <div class="m-3">
-          <img style="width: 50px; height: 50px; object-fit: contain;" src="static/image/userphoto.jpg" alt="">
+        <div>
+            <h4 class="text-center bg-success text-light">SON GÖNDERİLER</h4>
         </div>
-        <div class="m-3">
-          (kullanıcı adı)&(konu)&(tarih)
-        </div>
-      </div>
-      <div class="d-flex">
-        <div class="m-3">
-          <img class="img-fluid" style="width: 50px; height: 50px; object-fit: contain;" src="static/image/userphoto.jpg" alt="">
-        </div>
-        <div class="m-3">
-          (kullanıcı adı)&(konu)&(tarih)
-        </div>
-      </div>
-      <div class="d-flex">
-        <div class="m-3">
-          <img class="img-fluid" style="width: 50px; height: 50px; object-fit: contain;" src="static/image/userphoto.jpg" alt="">
-        </div>
-        <div class="m-3">
-          (kullanıcı adı)&(konu)&(tarih)
-        </div>
-      </div>
-      <div class="d-flex">
-        <div class="m-3">
-          <img class="img-fluid" style="width: 50px; height: 50px; object-fit: contain;" src="static/image/userphoto.jpg" alt="">
-        </div>
-        <div class="m-3">
-          (kullanıcı adı)&(konu)&(tarih)
-        </div>
+        {% for news_item in news_with_profile %}
+            <div class="d-flex">
+                <div class="m-3">
+                    <img class="img-fluid" style="width: 50px; height: 50px; object-fit: contain;" src="{{ news_item.profile_photo_url }}" alt="user photo">
+                </div>
+                <div class="m-3">
+                    {{ news_item.news.user_name }} - {{ news_item.news.title }} - {{ news_item.news.response_date }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+      
+       
       </div>
     </div>
   </div>

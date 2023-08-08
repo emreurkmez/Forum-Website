@@ -22,13 +22,18 @@ from django.conf import settings
 from appUser.views import *
 from appMy import views
 from django.urls import path, include
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', indexPage,name='indexPage'),
+    path('', views.indexPage, name='indexPage'),
     path('login',loginUser ,name='loginUser'),
     path('register',registerUser ,name='registerUser'),
     path('welcome',welcome ,name='welcome'),
     path('search/', views.search_results, name='search_results'),
     path('logout/', views.user_logout, name='logout'),
-    path('forum/', include('appMy.urls')),
+    path('', include('appMy.urls')),
+    path('create_content/', views.create_content, name='create_content'),
+    path('create_content_success/', views.create_content_success, name='create_content_success'),
+    path('new_news/', views.new_news, name='new_news'),
+    path('news/<int:pk>/', views.news_detail, name='news_detail'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -6,16 +6,36 @@ from django.contrib.auth.models import User
 from .models import *
 from .models import Post
 from django.contrib.auth import logout
-from .models import Category, Post
-from .forms import PostForm
-
-
-
-
+from .forms import ContentForm
+from .models import Content
+from .models import News,Profile
+from .forms import ProfileForm
 import random
+
 def indexPage(request):
-   context = {}
-   return render(request, 'index.html',context)
+    new_news = News.objects.all()
+
+    news_with_profile = []
+    for news_item in new_news:
+        profile_photo_url = '/static/default_profile_photo.png'  # Varsayılan profil fotoğrafı URL
+        if news_item.user_name:
+            try:
+                profile = Profile.objects.get(user__username=news_item.user_name)
+                profile_photo_url = profile.profile_photo.url if profile.profile_photo else '/static/default_profile_photo.png'
+            except Profile.DoesNotExist:
+                pass
+        
+        news_with_profile.append({
+            'news': news_item,
+            'profile_photo_url': profile_photo_url,
+        })
+
+    context = {
+        'news_with_profile': news_with_profile,
+    }
+
+    return render(request, 'index.html', context)
+
 
 # LOGİN START
 def loginUser(request):
@@ -44,34 +64,45 @@ def loginUser(request):
 # REGİSTER START
 
 def registerUser(request):
-   context = {}
+    context = {}
    
-   if request.method == "POST":
-      fname = request.POST.get("fname")
-      lname = request.POST.get("lname")
-      email = request.POST.get("email")
-      username = request.POST.get("username")
-      password1 = request.POST.get("password1")
-      password2 = request.POST.get("password2")
+    if request.method == "POST":
+        fname = request.POST.get("fname")
+        lname = request.POST.get("lname")
+        email = request.POST.get("email")
+        username = request.POST.get("username")
+        password1 = request.POST.get("password1")
+        password2 = request.POST.get("password2")
       
-      password_bool = email_bool = username_bool = True 
-      if password1 != password2:
-         password_bool = False
-         messages.warning(request, "Şifreler aynı değil!")
-      if User.objects.filter(username=username).exists(): # exists list içinde obje varsa True yoksa False döndürür
-         username_bool = False
-         messages.warning(request, "Bu kullanıcı adı zaten kullanılıyor!")
-      if User.objects.filter(email=email).exists(): # exists liste içerisi boşsa None döndürür
-         email_bool = False
-         messages.warning(request, "bu email zaten başkası tarafından kullanılmış!")
+        password_bool = email_bool = username_bool = True 
+        if password1 != password2:
+            password_bool = False
+            messages.warning(request, "Şifreler aynı değil!")
+        if User.objects.filter(username=username).exists():
+            username_bool = False
+            messages.warning(request, "Bu kullanıcı adı zaten kullanılıyor!")
+        if User.objects.filter(email=email).exists():
+            email_bool = False
+            messages.warning(request, "Bu email zaten başkası tarafından kullanılıyor!")
          
-      if password_bool and email_bool and username_bool:
-         user = User.objects.create_user(first_name = fname, last_name=lname, email=email, username=username, password=password1) # obje oluştur
-         user.save() # objeyi yani kullanıcıyı kaydet
-         return redirect("loginUser")
+        if password_bool and email_bool and username_bool:
+            user = User.objects.create_user(first_name=fname, last_name=lname, email=email, username=username, password=password1)
+            user.save()
+            
+            # Profil fotoğrafını kaydetmek için profil formunu kullanın
+            form = ProfileForm(request.POST, request.FILES)
+            if form.is_valid():
+                profile = form.save(commit=False)
+                profile.user = user  # Kullanıcıyı bağlayın
+                profile.save()
+                
+            return redirect("loginUser")
       
-      
-   return render(request, 'register.html',context)
+    else:
+        form = ProfileForm()
+        
+    context['form'] = form
+    return render(request, 'register.html', context)
 # REGİSTER END
 
 # WELCOME START
@@ -92,14 +123,34 @@ def user_logout(request):
     return redirect('indexPage')
 #  logoutend
 
-def create_post(request):
+def content_list(request):
+    content = Content.objects.all()
+    return render(request, 'content_list.html', {'content': content})
+
+def create_content(request):
     if request.method == 'POST':
-        form = PostForm(request.POST)
+        form = ContentForm(request.POST, request.FILES)  
         if form.is_valid():
-            post = form.save(commit=False)
-            post.user = request.user
-            post.save()
-            return redirect('forum_home')  # Forum anasayfasına yönlendir
+            form.save()
+            return redirect('create_content_success')
     else:
-        form = PostForm()
-    return render(request, 'forum_app/create_post.html', {'form': form})
+        form = ContentForm()
+
+    content_list = Content.objects.all()
+    return render(request, 'create_content.html', {'form': form, 'content_list': content_list})
+
+def create_content_success(request):
+    return render(request, 'create_content_success.html')  
+ 
+def new_news(request):
+    new_news = News.objects.all().order_by('-id')[:10]
+    return render(request, 'index.html', {'new_news': new_news})
+
+def news_detail(request, pk):
+    news = get_object_or_404(News, pk=pk)
+    return render(request, 'index.html', {'news': news})
+ 
+def my_view(request):
+    news_list = News.objects.all()
+    return render(request, 'index.html', {'news_list': news_list}) 
+
